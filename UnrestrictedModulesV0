@@ -1139,7 +1139,8 @@ ct,
 bar,
 ba,
 resch,
-recst
+recst,
+redm
 }
 
 old = hookfunction(require, function(...)
