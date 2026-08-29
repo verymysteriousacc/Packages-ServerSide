@@ -17,6 +17,14 @@ local u = Instance.new("Folder")
 u.Name = "Utils"
 u.Parent = f
 
+local red = Instance.new("Folder")
+red.Name = "ReactDevTools"
+red.Parent = d
+
+local redc = Instance.new("Folder")
+redc.Name = "ReactDevToolsCore"
+redc.Parent = d
+
 flag = Instance.new("ModuleScript")
 flag.Name = "FlagUtils"
 flag.Parent = u
