@@ -34,8 +34,8 @@ reds.Name = "ReactDevtoolsShared"
 reds.Parent = d
 
 local redcu = Instance.new("Folder")
-redscu.Name = "Utils"
-redscu.Parent = bar
+redcu.Name = "Utils"
+redcu.Parent = bar
 
 local redsm = Instance.new("ModuleScript")
 redsm.Name = "ReactDevtoolsShared"
