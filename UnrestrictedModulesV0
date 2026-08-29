@@ -17,13 +17,20 @@ local u = Instance.new("Folder")
 u.Name = "Utils"
 u.Parent = f
 
-local red = Instance.new("Folder")
+local red = Instance.new("ModuleScript")
 red.Name = "ReactDevTools"
 red.Parent = d
 
-local redc = Instance.new("Folder")
+local redc = Instance.new("ModuleScript")
 redc.Name = "ReactDevToolsCore"
 redc.Parent = d
+redc.Source = [[
+local backend = require(script.backend)
+
+return {
+        backend = backend,
+}
+]]
 
 flag = Instance.new("ModuleScript")
 flag.Name = "FlagUtils"
@@ -48,7 +55,7 @@ return FlagUtil
 
 local ct = Instance.new("ModuleScript")
 ct.Parent = u
-ct.name = "t"
+ct.Name = "t"
 ct.Source = [[
 local v_u_8 = {
 ["type"] = function(p_u_1) -- name: type
