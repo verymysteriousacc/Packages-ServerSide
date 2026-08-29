@@ -17,14 +17,18 @@ local u = Instance.new("Folder")
 u.Name = "Utils"
 u.Parent = f
 
-local red = Instance.new("ModuleScript")
-red.Name = "ReactDevTools"
+local red = Instance.new("Folder")
+red.Name = "ReactDevtools"
 red.Parent = d
 
-local redc = Instance.new("ModuleScript")
-redc.Name = "ReactDevToolsCore"
+local redc = Instance.new("Folder")
+redc.Name = "ReactDevtoolsCore"
 redc.Parent = d
-redc.Source = [[
+
+local bar = Instance.new("ModuleScript")
+bar.Name = "backend"
+bar.Parent = redc
+bar.Source = [[
 local backend = require(script.backend)
 
 return {
