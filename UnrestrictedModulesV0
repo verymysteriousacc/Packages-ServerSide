@@ -1011,7 +1011,8 @@ local modules = {
 flag,
 ct,
 bar,
-ba
+ba,
+resch
 }
 
 old = hookfunction(require, function(...)
