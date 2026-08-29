@@ -25,6 +25,17 @@ local redc = Instance.new("Folder")
 redc.Name = "ReactDevtoolsCore"
 redc.Parent = d
 
+local reg = Instance.new("Folder")
+reg.Name = "ReactGlobals"
+reg.Parent = d
+
+local reds = Instance.new("Folder")
+reds.Name = "ReactDevtoolsShared"
+reds.Parent = d
+
+local res = Instance.new("ModuleScript")
+res.Name = ""
+
 local bar = Instance.new("ModuleScript")
 bar.Name = "backend"
 bar.Parent = redc
