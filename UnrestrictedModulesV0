@@ -37,6 +37,18 @@ local redcu = Instance.new("Folder")
 redscu.Name = "Utils"
 redscu.Parent = bar
 
+local redm = Instance.new("ModuleScript")
+redm.Name = "ReactDevtools"
+redm.Parent = red
+redm.Source = [[
+local Packages = script.Parent
+local ReactDevtoolsCore = require(script.Parent.Parent.ReactDevtoolsCore)
+
+local connectToDevtools = ReactDevtoolsCore.backend.connectToDevtools
+
+connectToDevtools()
+]]
+
 local recst = Instance.new("ModuleScript")
 resct.Name = "serializeTable"
 resct.Parent = redcu
