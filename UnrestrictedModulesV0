@@ -37,6 +37,29 @@ local redcu = Instance.new("Folder")
 redscu.Name = "Utils"
 redscu.Parent = bar
 
+local redsm = Instance.new("ModuleScript")
+redsm.Name = "ReactDevtoolsShared"
+redsm.Parent = reds
+redsm.Source = [[
+local Bridge = require(script.bridge)
+local Types = require(script.types)
+local Backend = require(script.backend)
+
+export type BackendBridge = Bridge.BackendBridge
+export type ComponentFilter = Types.ComponentFilter
+export type DevtoolsHook = Backend.DevToolsHook
+
+return {
+        constants = require(script.constants),
+        backend = require(script.backend),
+        bridge = require(script.bridge),
+        devtools = require(script.devtools),
+        hydration = require(script.hydration),
+        hook = require(script.hook),
+        utils = require(script.utils),
+}
+]]
+
 local redm = Instance.new("ModuleScript")
 redm.Name = "ReactDevtools"
 redm.Parent = red
