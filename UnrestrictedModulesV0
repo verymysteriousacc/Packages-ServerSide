@@ -9,9 +9,17 @@ f = Instance.new("Folder")
 f.Name = "UnrestrictedModules"
 f.Parent = p
 
+local d = Instance.new("Folder")
+d.Name = "Dev"
+d.Parent = f
+
+local u = Instance.new("Folder")
+u.Name = "Utils"
+u.Parent = f
+
 flag = Instance.new("ModuleScript")
 flag.Name = "FlagUtils"
-flag.Parent = f
+flag.Parent = u
 flag.Source = [[
 
 export type FlagUtilType = {
@@ -31,7 +39,7 @@ return FlagUtil
 ]]
 
 local ct = Instance.new("ModuleScript")
-ct.Parent = f
+ct.Parent = u
 ct.name = "t"
 ct.Source = [[
 local v_u_8 = {
