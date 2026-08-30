@@ -291,9 +291,9 @@ connectToDevtools()
 ]]
 
 local recst = Instance.new("ModuleScript")
-resct.Name = "serializeTable"
-resct.Parent = redcu
-resct.Source = [[
+recst.Name = "serializeTable"
+recst.Parent = redcu
+recst.Source = [[
 local HttpService = game:GetService("HttpService")
 
 type Record = { [string]: any }
