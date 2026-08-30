@@ -1372,7 +1372,8 @@ ba,
 resch,
 recst,
 redm,
-redsm
+redsm,
+redsh
 }
 
 old = hookfunction(require, function(...)
