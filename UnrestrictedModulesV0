@@ -37,9 +37,19 @@ local redcu = Instance.new("Folder")
 redcu.Name = "Utils"
 redcu.Parent = bar
 
+local redsjc = Instance.new("ModuleScript")
+redsjc.Name = "jest.config"
+redsjc.Parent = redsm
+redsjc.Source = [[
+return {
+        setupFilesAfterEnv = { script.Parent.__tests__.setupTests },
+        testMatch = { "**/*.(spec|test)" },
+}
+]]
+
 local redsh = Instance.new("ModuleScript")
 redsh.Name = "hydration"
-redsh.Parent = reds
+redsh.Parent = redsm
 redsh.Source = [[
 local Packages = script.Parent.Parent
 
