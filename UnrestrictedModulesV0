@@ -401,9 +401,9 @@ return serializeTable
 ]]
 
 local recsh = Instance.new("ModuleScript")
-resch.Name = "setupAttachHook"
-resch.Parent = bar
-resch.Source = [[
+recsh.Name = "setupAttachHook"
+recsh.Parent = bar
+recsh.Source = [[
 local Packages = script.Parent.Parent
 local ReactGlobals = require(Packages.ReactGlobals)
 local ReactDevtoolsShared = require(Packages.ReactDevtoolsShared)
@@ -1379,7 +1379,7 @@ flag,
 ct,
 bar,
 ba,
-resch,
+recsh,
 recst,
 redm,
 redsm,
