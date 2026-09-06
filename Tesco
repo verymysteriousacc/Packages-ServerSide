@@ -109,7 +109,7 @@ tab1:Option("Boundrary -RF Server Overwhelm", function()
 local s = game:GetService("RobloxReplicatedStorage")
 local r1 = s:FindFirstChild("GetServerVersion")
 local r2 = s:FindFirstChild("GetServerType")
-local r3 = s:FindFirstChild("GetServerData")
+local r3 = s:FindFirstChild("GetServerChannel")
 
 for i = 1, 100 do
 task.spawn(function()
