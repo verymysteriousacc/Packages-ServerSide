@@ -113,9 +113,9 @@ local r1 = s:FindFirstChild("GetServerVersion")
 local r2 = s:FindFirstChild("GetServerType")
 local r3 = s:FindFirstChild("GetServerChannel")
 
-for i = 1, 40 do
+for i = 1, 30 do
 task.spawn(function()
-for i = 1, 3000 do
+for i = 1, 2000 do
 task.spawn(function()
 while task.wait() do
 r1:InvokeServer()
