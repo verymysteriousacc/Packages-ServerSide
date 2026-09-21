@@ -14,7 +14,7 @@ local function createInstance(className, properties, parent)
     return instance
 end
 
-local function Add(instancename, parent, assetid)
+local function Add(instancename, parent, assetid, cropRect)
     local inst = Instance.new(instancename)
     
     if assetid then
@@ -27,6 +27,15 @@ local function Add(instancename, parent, assetid)
             inst.MeshId = idStr
         elseif inst:IsA("Sound") then
             inst.SoundId = idStr
+        end
+    end
+
+    if cropRect and (inst:IsA("ImageLabel") or inst:IsA("ImageButton")) then
+        if cropRect.Offset then
+            inst.ImageRectOffset = cropRect.Offset
+        end
+        if cropRect.Size then
+            inst.ImageRectSize = cropRect.Size
         end
     end
 
@@ -58,9 +67,10 @@ local function AddMulti(instancepath, returnedtable)
         local className = item.Class or item.ClassName or item[1]
         local props = item.Props or item.Properties or item[2]
         local assetId = item.AssetId or item.Icon or item[3]
+        local crop = item.Crop or item.CropRect or item[4]
 
         if className then
-            local newInst = Add(className, instancepath, assetId)
+            local newInst = Add(className, instancepath, assetId, crop)
             if props and type(props) == "table" then
                 Write(newInst, props)
             end
@@ -224,7 +234,7 @@ function InternalDeX.init()
     return self
 end
 
-function InternalDeX:AddNode(targetInstance, indentLevel, iconAssetId)
+function InternalDeX:AddNode(targetInstance, indentLevel, iconAssetId, cropRect)
     indentLevel = indentLevel or 0
     local name = targetInstance and targetInstance.Name or "Nil"
 
@@ -242,7 +252,7 @@ function InternalDeX:AddNode(targetInstance, indentLevel, iconAssetId)
     }, self.ExplorerScroll)
 
     if iconAssetId then
-        local icon = Add("ImageLabel", nodeBtn, iconAssetId)
+        local icon = Add("ImageLabel", nodeBtn, iconAssetId, cropRect)
         Write(icon, {
             Size = UDim2.new(0, 14, 0, 14),
             Position = UDim2.new(0, (indentLevel * 10) + 2, 0.5, -7),
