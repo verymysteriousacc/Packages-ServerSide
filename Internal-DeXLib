@@ -1,0 +1,327 @@
+local InternalDeX = {}
+InternalDeX.__index = InternalDeX
+
+local function createInstance(className, properties, parent)
+    local instance = Instance.new(className)
+    if properties then
+        for prop, val in pairs(properties) do
+            instance[prop] = val
+        end
+    end
+    if parent then
+        instance.Parent = parent
+    end
+    return instance
+end
+
+local function Add(instancename, parent, assetid)
+    local inst = Instance.new(instancename)
+    
+    if assetid then
+        local idStr = typeof(assetid) == "number" and ("rbxassetid://" .. tostring(assetid)) or tostring(assetid)
+        if inst:IsA("ImageLabel") or inst:IsA("ImageButton") then
+            inst.Image = idStr
+        elseif inst:IsA("Decal") or inst:IsA("Texture") then
+            inst.Texture = idStr
+        elseif inst:IsA("SpecialMesh") then
+            inst.MeshId = idStr
+        elseif inst:IsA("Sound") then
+            inst.SoundId = idStr
+        end
+    end
+
+    if parent then
+        inst.Parent = parent
+    end
+
+    return inst
+end
+
+local function Write(instancepath, propertiesTable)
+    assert(instancepath and typeof(instancepath) == "Instance", "Invalid Instance")
+    assert(type(propertiesTable) == "table", "Expected table")
+
+    for prop, val in pairs(propertiesTable) do
+        pcall(function()
+            instancepath[prop] = val
+        end)
+    end
+    return instancepath
+end
+
+local function AddMulti(instancepath, returnedtable)
+    assert(instancepath and typeof(instancepath) == "Instance", "Invalid Instance")
+    assert(type(returnedtable) == "table", "Expected table")
+
+    local created = {}
+    for _, item in ipairs(returnedtable) do
+        local className = item.Class or item.ClassName or item[1]
+        local props = item.Props or item.Properties or item[2]
+        local assetId = item.AssetId or item.Icon or item[3]
+
+        if className then
+            local newInst = Add(className, instancepath, assetId)
+            if props and type(props) == "table" then
+                Write(newInst, props)
+            end
+            table.insert(created, newInst)
+        end
+    end
+    return created
+end
+
+function InternalDeX.init()
+    local self = setmetatable({}, InternalDeX)
+    self.NodeCache = {}
+
+    self.Gui = createInstance("ScreenGui", {
+        Name = "Internal-DeX",
+        ResetOnSpawn = false,
+        ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    })
+
+    if gethui then
+        self.Gui.Parent = gethui()
+    elseif syn and syn.protect_gui then
+        syn.protect_gui(self.Gui)
+        self.Gui.Parent = game:GetService("CoreGui")
+    else
+        self.Gui.Parent = game:GetService("CoreGui")
+    end
+
+    self.MainFrame = createInstance("Frame", {
+        Name = "MainFrame",
+        Size = UDim2.new(0, 520, 0, 380),
+        Position = UDim2.new(0.5, -260, 0.3, -190),
+        BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+        BorderSizePixel = 1,
+        BorderColor3 = Color3.fromRGB(0, 50, 100),
+        Active = true,
+        Draggable = true
+    }, self.Gui)
+
+    self.UIGradient = createInstance("UIGradient", {
+        Color = ColorSequence.new({
+            ColorSequenceKeypoint.new(0.00, Color3.fromRGB(5, 5, 8)),
+            ColorSequenceKeypoint.new(0.50, Color3.fromRGB(10, 18, 32)),
+            ColorSequenceKeypoint.new(1.00, Color3.fromRGB(15, 30, 60))
+        }),
+        Rotation = 45
+    }, self.MainFrame)
+
+    self.Header = createInstance("Frame", {
+        Name = "Header",
+        Size = UDim2.new(1, 0, 0, 28),
+        BackgroundColor3 = Color3.fromRGB(5, 10, 20),
+        BorderSizePixel = 0,
+        BackgroundTransparency = 0.2
+    }, self.MainFrame)
+
+    self.Title = createInstance("TextLabel", {
+        Name = "Title",
+        Size = UDim2.new(0, 140, 1, 0),
+        Position = UDim2.new(0, 10, 0, 0),
+        BackgroundTransparency = 1,
+        Text = "Internal-DeX",
+        TextColor3 = Color3.fromRGB(100, 180, 255),
+        TextXAlignment = Enum.TextXAlignment.Left,
+        Font = Enum.Font.SourceSansBold,
+        TextSize = 15
+    }, self.Header)
+
+    self.SearchBar = createInstance("TextBox", {
+        Name = "SearchBar",
+        Size = UDim2.new(1, -160, 0, 20),
+        Position = UDim2.new(0, 150, 0, 4),
+        BackgroundColor3 = Color3.fromRGB(10, 15, 25),
+        BorderSizePixel = 1,
+        BorderColor3 = Color3.fromRGB(0, 80, 160),
+        Text = "",
+        PlaceholderText = "Search Explorer...",
+        PlaceholderColor3 = Color3.fromRGB(80, 120, 160),
+        TextColor3 = Color3.fromRGB(220, 240, 255),
+        TextXAlignment = Enum.TextXAlignment.Left,
+        Font = Enum.Font.SourceSans,
+        TextSize = 13,
+        ClearTextOnFocus = false
+    }, self.Header)
+
+    self.ExplorerPanel = createInstance("Frame", {
+        Name = "ExplorerPanel",
+        Size = UDim2.new(0.6, 0, 1, -28),
+        Position = UDim2.new(0, 0, 0, 28),
+        BackgroundTransparency = 0.8,
+        BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+        BorderSizePixel = 0
+    }, self.MainFrame)
+
+    self.ExplorerScroll = createInstance("ScrollingFrame", {
+        Name = "ExplorerScroll",
+        Size = UDim2.new(1, -4, 1, -4),
+        Position = UDim2.new(0, 2, 0, 2),
+        BackgroundTransparency = 1,
+        BorderSizePixel = 0,
+        CanvasSize = UDim2.new(0, 0, 0, 0),
+        ScrollBarThickness = 5,
+        ScrollBarImageColor3 = Color3.fromRGB(0, 100, 200)
+    }, self.ExplorerPanel)
+
+    self.ExplorerList = createInstance("UIListLayout", {
+        SortOrder = Enum.SortOrder.LayoutOrder,
+        Padding = UDim.new(0, 1)
+    }, self.ExplorerScroll)
+
+    self.PropertiesPanel = createInstance("Frame", {
+        Name = "PropertiesPanel",
+        Size = UDim2.new(0.4, 0, 1, -28),
+        Position = UDim2.new(0.6, 0, 0, 28),
+        BackgroundTransparency = 0.5,
+        BackgroundColor3 = Color3.fromRGB(5, 10, 20),
+        BorderSizePixel = 1,
+        BorderColor3 = Color3.fromRGB(0, 50, 100)
+    }, self.MainFrame)
+
+    self.PropertiesHeader = createInstance("TextLabel", {
+        Name = "PropertiesHeader",
+        Size = UDim2.new(1, 0, 0, 20),
+        BackgroundColor3 = Color3.fromRGB(10, 20, 40),
+        BorderSizePixel = 0,
+        Text = "  Properties",
+        TextColor3 = Color3.fromRGB(120, 180, 255),
+        TextXAlignment = Enum.TextXAlignment.Left,
+        Font = Enum.Font.SourceSansBold,
+        TextSize = 13
+    }, self.PropertiesPanel)
+
+    self.PropertiesScroll = createInstance("ScrollingFrame", {
+        Name = "PropertiesScroll",
+        Size = UDim2.new(1, -4, 1, -24),
+        Position = UDim2.new(0, 2, 0, 22),
+        BackgroundTransparency = 1,
+        BorderSizePixel = 0,
+        CanvasSize = UDim2.new(0, 0, 0, 0),
+        ScrollBarThickness = 5,
+        ScrollBarImageColor3 = Color3.fromRGB(0, 100, 200)
+    }, self.PropertiesPanel)
+
+    self.PropertiesList = createInstance("UIListLayout", {
+        SortOrder = Enum.SortOrder.LayoutOrder,
+        Padding = UDim.new(0, 1)
+    }, self.PropertiesScroll)
+
+    self.SearchBar:GetPropertyChangedSignal("Text"):Connect(function()
+        self:FilterNodes(self.SearchBar.Text)
+    end)
+
+    self.ExplorerList:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+        self.ExplorerScroll.CanvasSize = UDim2.new(0, 0, 0, self.ExplorerList.AbsoluteContentSize.Y)
+    end)
+
+    self.PropertiesList:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+        self.PropertiesScroll.CanvasSize = UDim2.new(0, 0, 0, self.PropertiesList.AbsoluteContentSize.Y)
+    end)
+
+    return self
+end
+
+function InternalDeX:AddNode(targetInstance, indentLevel, iconAssetId)
+    indentLevel = indentLevel or 0
+    local name = targetInstance and targetInstance.Name or "Nil"
+
+    local nodeBtn = createInstance("TextButton", {
+        Name = name,
+        Size = UDim2.new(1, 0, 0, 18),
+        BackgroundColor3 = Color3.fromRGB(10, 20, 35),
+        BackgroundTransparency = 0.4,
+        BorderSizePixel = 0,
+        Text = string.rep("  ", indentLevel) .. " 🔹 " .. name,
+        TextColor3 = Color3.fromRGB(200, 225, 255),
+        TextXAlignment = Enum.TextXAlignment.Left,
+        Font = Enum.Font.SourceSans,
+        TextSize = 13
+    }, self.ExplorerScroll)
+
+    if iconAssetId then
+        local icon = Add("ImageLabel", nodeBtn, iconAssetId)
+        Write(icon, {
+            Size = UDim2.new(0, 14, 0, 14),
+            Position = UDim2.new(0, (indentLevel * 10) + 2, 0.5, -7),
+            BackgroundTransparency = 1
+        })
+    end
+
+    table.insert(self.NodeCache, {Button = nodeBtn, Instance = targetInstance})
+
+    nodeBtn.MouseButton1Click:Connect(function()
+        self:RenderProperties(targetInstance)
+    end)
+
+    return nodeBtn
+end
+
+function InternalDeX:FilterNodes(query)
+    query = string.lower(query)
+    for _, nodeData in ipairs(self.NodeCache) do
+        if query == "" or string.find(string.lower(nodeData.Instance.Name), query) then
+            nodeData.Button.Visible = true
+        else
+            nodeData.Button.Visible = false
+        end
+    end
+end
+
+function InternalDeX:RenderProperties(target)
+    for _, child in ipairs(self.PropertiesScroll:GetChildren()) do
+        if child:IsA("Frame") then child:Destroy() end
+    end
+
+    if not target then return end
+
+    local displayProps = {
+        {"Name", target.Name},
+        {"ClassName", target.ClassName},
+        {"Parent", target.Parent and target.Parent.Name or "nil"}
+    }
+
+    if target:IsA("BasePart") then
+        table.insert(displayProps, {"Anchored", tostring(target.Anchored)})
+        table.insert(displayProps, {"CanCollide", tostring(target.CanCollide)})
+        table.insert(displayProps, {"Transparency", tostring(target.Transparency)})
+    end
+
+    for _, propData in ipairs(displayProps) do
+        local propRow = createInstance("Frame", {
+            Size = UDim2.new(1, 0, 0, 18),
+            BackgroundColor3 = Color3.fromRGB(15, 25, 45),
+            BackgroundTransparency = 0.3,
+            BorderSizePixel = 0
+        }, self.PropertiesScroll)
+
+        createInstance("TextLabel", {
+            Size = UDim2.new(0.45, 0, 1, 0),
+            BackgroundTransparency = 1,
+            Text = " " .. propData[1],
+            TextColor3 = Color3.fromRGB(100, 160, 220),
+            TextXAlignment = Enum.TextXAlignment.Left,
+            Font = Enum.Font.SourceSans,
+            TextSize = 12
+        }, propRow)
+
+        createInstance("TextLabel", {
+            Size = UDim2.new(0.55, 0, 1, 0),
+            Position = UDim2.new(0.45, 0, 0, 0),
+            BackgroundTransparency = 1,
+            Text = tostring(propData[2]),
+            TextColor3 = Color3.fromRGB(220, 235, 255),
+            TextXAlignment = Enum.TextXAlignment.Left,
+            Font = Enum.Font.SourceSans,
+            TextSize = 12
+        }, propRow)
+    end
+end
+
+InternalDeX.Add = Add
+InternalDeX.Write = Write
+InternalDeX.AddMulti = AddMulti
+
+return InternalDeX
